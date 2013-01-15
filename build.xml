@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*
+    * Copyright (C) 2013 Developed by reg <entry.reg@gmail.com>
+    *
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *
+    *      http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+*/
+-->
+<project name="flyDCstat" default="default" basedir=".">
+    <description>Builds, tests, and runs the project flyDCstat.</description>
+    <import file="nbproject/build-impl.xml"/>
+    
+    <property name="version" value="0.1"/>
+    <property name="createdBy" value="reg (entry.reg@gmail.com)"/>
+    <property name="specificationTitle" value="Utility statistics"/>
+    
+    <target depends="init,-do-jar-with-libraries-create-manifest,-do-jar-with-libraries-copy-manifest" if="do.archive+main.class.available" name="-do-jar-with-libraries-set-main">
+        <buildnumber file="build.num"/>
+        <manifest file="${tmp.manifest.file}" mode="update">
+            <attribute name="Implementation-Version" value="build-${build.number}"/>
+            <attribute name="Specification-Title" value="${specificationTitle}"/>
+            <attribute name="Created-By" value="${createdBy}"/>
+            <attribute name="Specification-Version" value="${version}"/>
+        </manifest>
+    </target>
+    
+    <target name="-post-jar">
+        <jar jarfile="dist/combined-flyDCstat.jar">
+            <zipfileset src="${dist.jar}" excludes="META-INF/*" />
+            <zipfileset src="lib/sqlite-jdbc-3.7.15.jar" excludes="META-INF/*" />
+            <manifest>
+                <attribute name="Main-Class" value="reg.util.dc.flydcstat.FlyDCstat"/>
+                <attribute name="Implementation-Version" value="build-${build.number}"/>
+                <attribute name="Specification-Title" value="${specificationTitle}"/>
+                <attribute name="Created-By" value="${createdBy}"/>
+                <attribute name="Specification-Version" value="${version}"/>
+            </manifest>
+        </jar>
+    </target>
+</project>
