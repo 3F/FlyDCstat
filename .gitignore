@@ -1,0 +1,6 @@
+/dist
+/build
+/*.log
+/build.num
+/*.sqlite
+/nbproject/private

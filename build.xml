@@ -20,7 +20,7 @@
     <description>Builds, tests, and runs the project flyDCstat.</description>
     <import file="nbproject/build-impl.xml"/>
     
-    <property name="version" value="0.1"/>
+    <property name="version" value="0.1.1"/>
     <property name="createdBy" value="reg (entry.reg@gmail.com)"/>
     <property name="specificationTitle" value="Utility statistics"/>
     
@@ -35,7 +35,7 @@
     </target>
     
     <target name="-post-jar">
-        <jar jarfile="dist/combined-flyDCstat.jar">
+        <jar jarfile="dist/flyDCstat_full.jar">
             <zipfileset src="${dist.jar}" excludes="META-INF/*" />
             <zipfileset src="lib/sqlite-jdbc-3.7.15.jar" excludes="META-INF/*" />
             <manifest>

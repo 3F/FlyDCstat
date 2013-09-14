@@ -17,7 +17,12 @@
 package reg.util.dc.flydcstat;
 
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ResourceBundle;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
+import javax.swing.JOptionPane;
 
 public class FrontForm extends javax.swing.JFrame
 {
@@ -143,7 +148,8 @@ public class FrontForm extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jDialog1 = new javax.swing.JDialog();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -158,6 +164,7 @@ public class FrontForm extends javax.swing.JFrame
         jMenuDhtUpload = new javax.swing.JMenuItem();
         jMenuRatingAll = new javax.swing.JMenuItem();
         jMenuSettings = new javax.swing.JMenu();
+        jMenuItemAbout = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuLabelPath = new javax.swing.JMenu();
 
@@ -175,13 +182,15 @@ public class FrontForm extends javax.swing.JFrame
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tblInfo.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
                 {},
                 {},
                 {},
                 {}
             },
-            new String [] {
+            new String []
+            {
 
             }
         ));
@@ -214,10 +223,19 @@ public class FrontForm extends javax.swing.JFrame
 
         jMenuSettings.setText("Настройки");
 
+        jMenuItemAbout.setText("?");
+        jMenuItemAbout.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItemAboutActionPerformed(evt);
+            }
+        });
+        jMenuSettings.add(jMenuItemAbout);
+
         jMenuItem5.setToolTipText("Путь к папке FlylinkDC++");
         jMenuItem5.setEnabled(false);
         jMenuSettings.add(jMenuItem5);
-        jMenuItem5.getAccessibleContext().setAccessibleName("");
         jMenuItem5.getAccessibleContext().setAccessibleDescription("");
 
         jMenuBar1.add(jMenuSettings);
@@ -243,6 +261,26 @@ public class FrontForm extends javax.swing.JFrame
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItemAboutActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemAboutActionPerformed
+    {//GEN-HEADEREND:event_jMenuItemAboutActionPerformed
+        String version = "";
+        try{
+            InputStream stream      = getClass().getResourceAsStream("/META-INF/MANIFEST.MF");
+            Manifest manifest       = new Manifest(stream);
+            Attributes attributes   = manifest.getMainAttributes();
+            String specVersion      = attributes.getValue("Specification-Version");
+            if(specVersion != null){
+                version = String.format("v%s-%s", specVersion, attributes.getValue("Implementation-Version"));
+            }
+        }
+        catch(Exception e){}
+        JOptionPane.showMessageDialog(null, 
+                        "entry.reg@gmail.com\nsee detail on:\nhttps://bitbucket.org/3F\n" + 
+                        "\nThis product includes SQLiteJDBC (xerial.org)",
+                        version,
+                        JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jMenuItemAboutActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog jDialog1;
@@ -252,6 +290,7 @@ public class FrontForm extends javax.swing.JFrame
     private javax.swing.JMenuItem jMenuDownloadHub;
     private javax.swing.JMenuItem jMenuDownloadNick;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItemAbout;
     private javax.swing.JMenu jMenuLabelPath;
     private javax.swing.JMenuItem jMenuRatingAll;
     private javax.swing.JMenu jMenuSelectType;
