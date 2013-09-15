@@ -16,8 +16,8 @@
 
 package reg.util.dc.flydcstat;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
 import java.util.jar.Attributes;
@@ -30,6 +30,7 @@ public class FrontForm extends javax.swing.JFrame
     {
         setLookAndFeel();
         initComponents();
+        tblInfo.setComponentPopupMenu(jPopupMenu);
         this.setLocationRelativeTo(null); //to center screen
     }
     
@@ -152,6 +153,9 @@ public class FrontForm extends javax.swing.JFrame
     {
 
         jDialog1 = new javax.swing.JDialog();
+        jPopupMenu = new javax.swing.JPopupMenu();
+        jMenuItemSelectAll = new javax.swing.JMenuItem();
+        jMenuItemCopy = new javax.swing.JMenuItem();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblInfo = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -182,6 +186,26 @@ public class FrontForm extends javax.swing.JFrame
             jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 300, Short.MAX_VALUE)
         );
+
+        jMenuItemSelectAll.setText("Выделить все");
+        jMenuItemSelectAll.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItemSelectAllActionPerformed(evt);
+            }
+        });
+        jPopupMenu.add(jMenuItemSelectAll);
+
+        jMenuItemCopy.setText("Копировать");
+        jMenuItemCopy.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItemCopyActionPerformed(evt);
+            }
+        });
+        jPopupMenu.add(jMenuItemCopy);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -297,6 +321,17 @@ public class FrontForm extends javax.swing.JFrame
                         version,
                         JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
+
+    private void jMenuItemSelectAllActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemSelectAllActionPerformed
+    {//GEN-HEADEREND:event_jMenuItemSelectAllActionPerformed
+        tblInfo.selectAll();
+    }//GEN-LAST:event_jMenuItemSelectAllActionPerformed
+
+    private void jMenuItemCopyActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemCopyActionPerformed
+    {//GEN-HEADEREND:event_jMenuItemCopyActionPerformed
+        ActionEvent evtGen = new ActionEvent(tblInfo, ActionEvent.ACTION_PERFORMED, "copy");
+        tblInfo.getActionMap().get(evtGen.getActionCommand()).actionPerformed(evtGen);
+    }//GEN-LAST:event_jMenuItemCopyActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog jDialog1;
@@ -309,14 +344,17 @@ public class FrontForm extends javax.swing.JFrame
     private javax.swing.JMenu jMenuInfo;
     private javax.swing.JMenuItem jMenuItemAbout;
     private javax.swing.JMenuItem jMenuItemCompire;
+    private javax.swing.JMenuItem jMenuItemCopy;
     private javax.swing.JMenuItem jMenuItemDynamics;
     private javax.swing.JMenuItem jMenuItemMainSettings;
+    private javax.swing.JMenuItem jMenuItemSelectAll;
     private javax.swing.JMenu jMenuLabelPath;
     private javax.swing.JMenuItem jMenuRatingAll;
     private javax.swing.JMenu jMenuSelectType;
     private javax.swing.JMenu jMenuSettings;
     private javax.swing.JMenuItem jMenuUploadHub;
     private javax.swing.JMenuItem jMenuUploadNick;
+    private javax.swing.JPopupMenu jPopupMenu;
     private javax.swing.JScrollPane jScrollPane2;
     protected javax.swing.JTable tblInfo;
     // End of variables declaration//GEN-END:variables
