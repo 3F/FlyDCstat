@@ -40,7 +40,8 @@ public class FlyDCstat
             System.exit(IllegalOperationException.EXIT_CODE_CONFIG_READ_ERROR);
         }
         
-        String dbName = (args.length > 0)? args[0].trim() : null;
+        Config.load();
+        String dbName = (args.length > 0)? args[0].trim() : Config.data.dbPath;
         run(dbName, new Locale("ru", "RU")); //TODO: switch locale
     }
     

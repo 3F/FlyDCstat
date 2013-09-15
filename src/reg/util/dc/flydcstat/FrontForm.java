@@ -163,9 +163,13 @@ public class FrontForm extends javax.swing.JFrame
         jMenuDhtDownload = new javax.swing.JMenuItem();
         jMenuDhtUpload = new javax.swing.JMenuItem();
         jMenuRatingAll = new javax.swing.JMenuItem();
+        jMenuAnalysis = new javax.swing.JMenu();
+        jMenuItemCompire = new javax.swing.JMenuItem();
+        jMenuItemDynamics = new javax.swing.JMenuItem();
         jMenuSettings = new javax.swing.JMenu();
+        jMenuItemMainSettings = new javax.swing.JMenuItem();
+        jMenuInfo = new javax.swing.JMenu();
         jMenuItemAbout = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
         jMenuLabelPath = new javax.swing.JMenu();
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
@@ -221,7 +225,24 @@ public class FrontForm extends javax.swing.JFrame
 
         jMenuBar1.add(jMenuSelectType);
 
-        jMenuSettings.setText("Настройки");
+        jMenuAnalysis.setText("Анализ данных");
+
+        jMenuItemCompire.setText("Эффективность");
+        jMenuAnalysis.add(jMenuItemCompire);
+
+        jMenuItemDynamics.setText("Динамика");
+        jMenuAnalysis.add(jMenuItemDynamics);
+
+        jMenuBar1.add(jMenuAnalysis);
+
+        jMenuSettings.setText("Сервис");
+
+        jMenuItemMainSettings.setText("Параметры");
+        jMenuSettings.add(jMenuItemMainSettings);
+
+        jMenuBar1.add(jMenuSettings);
+
+        jMenuInfo.setText("Информация");
 
         jMenuItemAbout.setText("?");
         jMenuItemAbout.addActionListener(new java.awt.event.ActionListener()
@@ -231,14 +252,9 @@ public class FrontForm extends javax.swing.JFrame
                 jMenuItemAboutActionPerformed(evt);
             }
         });
-        jMenuSettings.add(jMenuItemAbout);
+        jMenuInfo.add(jMenuItemAbout);
 
-        jMenuItem5.setToolTipText("Путь к папке FlylinkDC++");
-        jMenuItem5.setEnabled(false);
-        jMenuSettings.add(jMenuItem5);
-        jMenuItem5.getAccessibleContext().setAccessibleDescription("");
-
-        jMenuBar1.add(jMenuSettings);
+        jMenuBar1.add(jMenuInfo);
 
         jMenuLabelPath.setText("/");
         jMenuLabelPath.setToolTipText("Текущий путь к папке FlylinkDC++");
@@ -284,13 +300,17 @@ public class FrontForm extends javax.swing.JFrame
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog jDialog1;
+    private javax.swing.JMenu jMenuAnalysis;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuDhtDownload;
     private javax.swing.JMenuItem jMenuDhtUpload;
     private javax.swing.JMenuItem jMenuDownloadHub;
     private javax.swing.JMenuItem jMenuDownloadNick;
-    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenu jMenuInfo;
     private javax.swing.JMenuItem jMenuItemAbout;
+    private javax.swing.JMenuItem jMenuItemCompire;
+    private javax.swing.JMenuItem jMenuItemDynamics;
+    private javax.swing.JMenuItem jMenuItemMainSettings;
     private javax.swing.JMenu jMenuLabelPath;
     private javax.swing.JMenuItem jMenuRatingAll;
     private javax.swing.JMenu jMenuSelectType;
