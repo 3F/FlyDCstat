@@ -16,16 +16,63 @@
 
 package reg.util.dc.flydcstat;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Rectangle2D;
 import java.io.InputStream;
 import java.util.ResourceBundle;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.event.ChangeListener;
+
+class JpanelGraphics extends JPanel
+{
+    //TODO: listner callable
+    public PieValues[] effectiveValueD = null;
+    public PieValues[] effectiveValueU = null;
+    
+    public void paint(Graphics g)
+    {
+        //TODO:
+        paintEffective(g);
+    }
+
+    public void setHandler(/* interface callable */)
+    {
+        //call method...
+    }
+    
+    protected void paintEffective(Graphics g)
+    {
+        Graphics2D g2d = (Graphics2D)g;
+        
+        g2d.setPaint(new Color(184, 198, 183));
+        g2d.fill(new Rectangle2D.Double(0, 0, getWidth(), getHeight()));
+
+        int limit = 15;
+        if(effectiveValueD != null && effectiveValueD.length > 0){
+            PieShape pie = new PieShape(34, 14, 100, 12);
+            Charts.pie3DpartEnhance(g2d, pie, effectiveValueD, new PieParts(30, 4, -90), limit);
+            Charts.linesSmoothing(g2d, 340, 10, 340, 180, new Color(24, 76, 123), 6);
+            Charts.legendPrint(g2d, effectiveValueD, 350, 10, limit);
+        }
+        
+        if(effectiveValueU != null && effectiveValueU.length > 0){
+            PieShape pie = new PieShape(34, 230, 100, 12);
+            Charts.pie3DpartEnhance(g2d, pie, effectiveValueU, new PieParts(30, 4, -90), limit);
+            Charts.linesSmoothing(g2d, 340, 240, 340, 400, new Color(24, 76, 123), 6);
+            Charts.legendPrint(g2d, effectiveValueU, 350, 240, limit);
+        }        
+    }
+}
 
 public class FrontForm extends javax.swing.JFrame
-{
+{    
     public FrontForm()
     {
         setLookAndFeel();
@@ -114,6 +161,11 @@ public class FrontForm extends javax.swing.JFrame
         jMenuRatingAll.addActionListener(l);
     }
     
+    protected void listnerVisualData(ChangeListener l)
+    {
+        jTabbedPane.addChangeListener(l);
+    }    
+    
     /**
      * label of path DB
      * @param path
@@ -156,8 +208,12 @@ public class FrontForm extends javax.swing.JFrame
         jPopupMenu = new javax.swing.JPopupMenu();
         jMenuItemSelectAll = new javax.swing.JMenuItem();
         jMenuItemCopy = new javax.swing.JMenuItem();
+        jTabbedPane = new javax.swing.JTabbedPane();
+        jPanelList = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblInfo = new javax.swing.JTable();
+        jPanelVisual = new javax.swing.JPanel();
+        jPanelDia = new JpanelGraphics();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuSelectType = new javax.swing.JMenu();
         jMenuDownloadHub = new javax.swing.JMenuItem();
@@ -170,6 +226,7 @@ public class FrontForm extends javax.swing.JFrame
         jMenuAnalysis = new javax.swing.JMenu();
         jMenuItemCompire = new javax.swing.JMenuItem();
         jMenuItemDynamics = new javax.swing.JMenuItem();
+        jMenuItemTrafficDia = new javax.swing.JMenuItem();
         jMenuSettings = new javax.swing.JMenu();
         jMenuItemMainSettings = new javax.swing.JMenuItem();
         jMenuInfo = new javax.swing.JMenu();
@@ -224,27 +281,113 @@ public class FrontForm extends javax.swing.JFrame
         ));
         jScrollPane2.setViewportView(tblInfo);
 
+        javax.swing.GroupLayout jPanelListLayout = new javax.swing.GroupLayout(jPanelList);
+        jPanelList.setLayout(jPanelListLayout);
+        jPanelListLayout.setHorizontalGroup(
+            jPanelListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
+        );
+        jPanelListLayout.setVerticalGroup(
+            jPanelListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+        );
+
+        jTabbedPane.addTab("Список", jPanelList);
+
+        javax.swing.GroupLayout jPanelDiaLayout = new javax.swing.GroupLayout(jPanelDia);
+        jPanelDia.setLayout(jPanelDiaLayout);
+        jPanelDiaLayout.setHorizontalGroup(
+            jPanelDiaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 741, Short.MAX_VALUE)
+        );
+        jPanelDiaLayout.setVerticalGroup(
+            jPanelDiaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 439, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanelVisualLayout = new javax.swing.GroupLayout(jPanelVisual);
+        jPanelVisual.setLayout(jPanelVisualLayout);
+        jPanelVisualLayout.setHorizontalGroup(
+            jPanelVisualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanelDia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanelVisualLayout.setVerticalGroup(
+            jPanelVisualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanelDia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        jTabbedPane.addTab("Визулизация", jPanelVisual);
+
         jMenuSelectType.setText("Выбрать тип");
 
         jMenuDownloadHub.setText("Скачиваний по хабам");
+        jMenuDownloadHub.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuDownloadHubActionPerformed(evt);
+            }
+        });
         jMenuSelectType.add(jMenuDownloadHub);
 
         jMenuDownloadNick.setText("Скачиваний по никам");
+        jMenuDownloadNick.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuDownloadNickActionPerformed(evt);
+            }
+        });
         jMenuSelectType.add(jMenuDownloadNick);
 
         jMenuUploadHub.setText("Отдача по хабам");
+        jMenuUploadHub.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuUploadHubActionPerformed(evt);
+            }
+        });
         jMenuSelectType.add(jMenuUploadHub);
 
         jMenuUploadNick.setText("Отдача по никам");
+        jMenuUploadNick.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuUploadNickActionPerformed(evt);
+            }
+        });
         jMenuSelectType.add(jMenuUploadNick);
 
         jMenuDhtDownload.setText("DHT Скачиваний");
+        jMenuDhtDownload.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuDhtDownloadActionPerformed(evt);
+            }
+        });
         jMenuSelectType.add(jMenuDhtDownload);
 
         jMenuDhtUpload.setText("DHT Отдачи");
+        jMenuDhtUpload.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuDhtUploadActionPerformed(evt);
+            }
+        });
         jMenuSelectType.add(jMenuDhtUpload);
 
         jMenuRatingAll.setText("Общий рейтинг");
+        jMenuRatingAll.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuRatingAllActionPerformed(evt);
+            }
+        });
         jMenuSelectType.add(jMenuRatingAll);
 
         jMenuBar1.add(jMenuSelectType);
@@ -252,10 +395,20 @@ public class FrontForm extends javax.swing.JFrame
         jMenuAnalysis.setText("Анализ данных");
 
         jMenuItemCompire.setText("Эффективность");
+        jMenuItemCompire.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItemCompireActionPerformed(evt);
+            }
+        });
         jMenuAnalysis.add(jMenuItemCompire);
 
         jMenuItemDynamics.setText("Динамика");
         jMenuAnalysis.add(jMenuItemDynamics);
+
+        jMenuItemTrafficDia.setText("Диаграмма трафика");
+        jMenuAnalysis.add(jMenuItemTrafficDia);
 
         jMenuBar1.add(jMenuAnalysis);
 
@@ -292,11 +445,11 @@ public class FrontForm extends javax.swing.JFrame
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addComponent(jTabbedPane)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+            .addComponent(jTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
         );
 
         pack();
@@ -332,6 +485,46 @@ public class FrontForm extends javax.swing.JFrame
         ActionEvent evtGen = new ActionEvent(tblInfo, ActionEvent.ACTION_PERFORMED, "copy");
         tblInfo.getActionMap().get(evtGen.getActionCommand()).actionPerformed(evtGen);
     }//GEN-LAST:event_jMenuItemCopyActionPerformed
+
+    private void jMenuItemCompireActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemCompireActionPerformed
+    {//GEN-HEADEREND:event_jMenuItemCompireActionPerformed
+        jTabbedPane.setSelectedComponent(jPanelVisual);
+    }//GEN-LAST:event_jMenuItemCompireActionPerformed
+
+    private void jMenuRatingAllActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuRatingAllActionPerformed
+    {//GEN-HEADEREND:event_jMenuRatingAllActionPerformed
+        jTabbedPane.setSelectedComponent(jPanelList);
+    }//GEN-LAST:event_jMenuRatingAllActionPerformed
+
+    private void jMenuDownloadHubActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuDownloadHubActionPerformed
+    {//GEN-HEADEREND:event_jMenuDownloadHubActionPerformed
+        jTabbedPane.setSelectedComponent(jPanelList);
+    }//GEN-LAST:event_jMenuDownloadHubActionPerformed
+
+    private void jMenuDownloadNickActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuDownloadNickActionPerformed
+    {//GEN-HEADEREND:event_jMenuDownloadNickActionPerformed
+        jTabbedPane.setSelectedComponent(jPanelList);
+    }//GEN-LAST:event_jMenuDownloadNickActionPerformed
+
+    private void jMenuUploadHubActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuUploadHubActionPerformed
+    {//GEN-HEADEREND:event_jMenuUploadHubActionPerformed
+        jTabbedPane.setSelectedComponent(jPanelList);
+    }//GEN-LAST:event_jMenuUploadHubActionPerformed
+
+    private void jMenuUploadNickActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuUploadNickActionPerformed
+    {//GEN-HEADEREND:event_jMenuUploadNickActionPerformed
+        jTabbedPane.setSelectedComponent(jPanelList);
+    }//GEN-LAST:event_jMenuUploadNickActionPerformed
+
+    private void jMenuDhtDownloadActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuDhtDownloadActionPerformed
+    {//GEN-HEADEREND:event_jMenuDhtDownloadActionPerformed
+        jTabbedPane.setSelectedComponent(jPanelList);
+    }//GEN-LAST:event_jMenuDhtDownloadActionPerformed
+
+    private void jMenuDhtUploadActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuDhtUploadActionPerformed
+    {//GEN-HEADEREND:event_jMenuDhtUploadActionPerformed
+        jTabbedPane.setSelectedComponent(jPanelList);
+    }//GEN-LAST:event_jMenuDhtUploadActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog jDialog1;
@@ -348,14 +541,19 @@ public class FrontForm extends javax.swing.JFrame
     private javax.swing.JMenuItem jMenuItemDynamics;
     private javax.swing.JMenuItem jMenuItemMainSettings;
     private javax.swing.JMenuItem jMenuItemSelectAll;
+    private javax.swing.JMenuItem jMenuItemTrafficDia;
     private javax.swing.JMenu jMenuLabelPath;
     private javax.swing.JMenuItem jMenuRatingAll;
     private javax.swing.JMenu jMenuSelectType;
     private javax.swing.JMenu jMenuSettings;
     private javax.swing.JMenuItem jMenuUploadHub;
     private javax.swing.JMenuItem jMenuUploadNick;
+    protected javax.swing.JPanel jPanelDia;
+    private javax.swing.JPanel jPanelList;
+    private javax.swing.JPanel jPanelVisual;
     private javax.swing.JPopupMenu jPopupMenu;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane;
     protected javax.swing.JTable tblInfo;
     // End of variables declaration//GEN-END:variables
 }

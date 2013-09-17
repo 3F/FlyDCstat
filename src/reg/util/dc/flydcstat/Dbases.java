@@ -32,6 +32,18 @@ import org.sqlite.SQLiteConfig;
  */
 public class Dbases
 {
+    
+    class TPairDataRaw
+    {
+        public String text;
+        public long sum;
+        public TPairDataRaw(String text, long sum)
+        {
+            this.text = text;
+            this.sum  = sum;
+        }
+    }
+    
     /**
      * Connecting to a database
      */
@@ -60,17 +72,10 @@ public class Dbases
     {
         ASC, DESC
     }
-    /**
-     * Path of default
-     */
-    private final static String dbDefault = "Settings/FlylinkDC.sqlite";
     
-    /**
-     * @param name DB name
-     */
     public Dbases(String name)
     {
-        dbName = (name == null)? dbDefault : name;
+        dbName = name;
     }
     
     /**
@@ -100,6 +105,7 @@ public class Dbases
     
     /**
      * Retrieving all rows by SELECT queries.
+     * TODO: refactor
      * @param sql query
      * @return result-set rows or empty ArrayList (if data do not exist).
      * @throws SQLSyntaxErrorException Restriction on the type of query.
@@ -128,6 +134,7 @@ public class Dbases
     
     /**
      * Wrapper getting data from db
+     * TODO: refactor
      * @param sql 
      * @return
      */
@@ -146,12 +153,25 @@ public class Dbases
         }
     }
     
+    //TODO:
+    protected ResultSet select(String sql)
+    {
+        try{
+            connect(); //TODO: deprecated
+            return db.createStatement().executeQuery(sql);
+        }
+        catch(Exception e){
+            logger.log(Level.SEVERE, "select fail", e);
+        }
+        return null;
+    }
+    
     /**
      * Formating size. IEC 60027
      * @param size Size of bytes
      * @return string with the prefix size
      */
-    protected String formatSize(double size)
+    public static String formatSize(double size)
     {
         String[] text = new String[]{"bytes","KiB","MiB","GiB","TiB","PiB","EiB","ZiB","YiB"};
         int i = 0;
@@ -170,7 +190,7 @@ public class Dbases
      * @param size
      * @return 
      */
-    protected String cellPrintSize(long size)
+    public static String cellPrintSize(long size)
     {
         String formated = formatSize((double)size);
         if(size < 1024){
@@ -220,6 +240,28 @@ public class Dbases
         return rows;
     }
     
+    public ArrayList<TPairDataRaw> statTrafficByHubPairRaw(TGroupStatistic group, TSorted order)
+    {
+        String field = fieldStatistic(group);
+        String sql   = "SELECT hub, SUM("+ field +") FROM v_fly_ratio_all GROUP BY hub ORDER BY "+ field +" ";
+        
+        ResultSet res = select(sql);
+        if(res == null){
+            return null;
+        }
+        
+        ArrayList<TPairDataRaw> ret = new ArrayList<>();
+        try{
+            while(res.next()){
+                ret.add(new TPairDataRaw(res.getObject(1).toString().toLowerCase().replace("dchub://", ""), res.getLong(2)));
+            }
+            return ret;
+        }
+        catch(SQLException e){
+            logger.log(Level.SEVERE, "fail getting pair data", e);
+        }
+        return null;
+    }
     
     /**
      * Traffic statistics by nick

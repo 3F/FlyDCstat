@@ -16,11 +16,15 @@
 
 package reg.util.dc.flydcstat;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import reg.util.dc.flydcstat.exceptions.IllegalOperationException;
 
@@ -214,6 +218,60 @@ public class StatController
             warpperActionPerformed(uimsg.getString("stat_rating_total"), columns, rows);
         }
     }
+       
+    private class visualDataFocus implements ChangeListener
+    {
+        @Override
+        public void stateChanged(ChangeEvent e)
+        {
+            if(e.getSource() instanceof JTabbedPane){
+                JTabbedPane pane = (JTabbedPane)e.getSource();
+                if(pane.getSelectedIndex() == 0){ // also getSelectedComponent
+                    return;
+                }
+                
+                ((JpanelGraphics)view.jPanelDia).effectiveValueD = fillData(
+                                                                        dBases.statTrafficByHubPairRaw(
+                                                                                    Dbases.TGroupStatistic.Download, 
+                                                                                    Dbases.TSorted.DESC), 
+                                                                        0.04f, 
+                                                                        new Color(122, 139, 51, 150));
+                
+                ((JpanelGraphics)view.jPanelDia).effectiveValueU = fillData(
+                                                                        dBases.statTrafficByHubPairRaw(
+                                                                                    Dbases.TGroupStatistic.Upload, 
+                                                                                    Dbases.TSorted.DESC), 
+                                                                        0.01f, 
+                                                                        new Color(116, 56, 62, 150));
+            }
+        }
+        
+        protected PieValues[] fillData(ArrayList<Dbases.TPairDataRaw> data, float range, Color cMain)
+        {
+            if(data == null){
+                return null;
+            }
+            
+            ArrayList<PieValues> effValues = new ArrayList<>();
+            long sum = 0;
+            for(Dbases.TPairDataRaw value: data){
+                sum += value.sum;
+            }
+
+            effValues.add(null);
+            long sumDefect = 0;
+            for(Dbases.TPairDataRaw value: data){
+                float percent = (float)((double)value.sum / (double)sum);
+                if(value.sum > 0 && percent < range){
+                    sumDefect += value.sum;
+
+                    effValues.add(new PieValues((percent * 100f), Dbases.formatSize(Long.valueOf(value.sum)) + " :: " + value.text));
+                }
+            }
+            effValues.set(0, (new PieValues(((float)((1 - (double)sumDefect / (double)sum)) * 100f), "Main", cMain)));
+            return effValues.toArray(new PieValues[effValues.size()]);
+        }
+    }    
     
     private void setHandlers()
     {
@@ -224,5 +282,6 @@ public class StatController
         view.listnerDhtDownload(new actionDhtDownload());
         view.listnerDhtUpload(new actionDhtUpload());
         view.listnerRatingAll(new actionRatingAll());
+        view.listnerVisualData(new visualDataFocus());
     }    
 }
