@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -80,11 +81,13 @@ public class StatController
         tblModel.setColumnCount(0);
         //erase all rows
         tblModel.setRowCount(0);     
-        //place new
+        //place new        
+        tblModel.addColumn(""); //TODO: first boolean class
         for(String column: columns){
             tblModel.addColumn(column);
         }
-        
+        view.tblInfo.getColumnModel().getColumn(0).setMaxWidth(24);
+                
         if(rows.size() < 1){
             JOptionPane.showMessageDialog(view,
                                             uimsg.getString("stat_norecord"),

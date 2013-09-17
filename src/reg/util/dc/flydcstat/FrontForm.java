@@ -208,6 +208,8 @@ public class FrontForm extends javax.swing.JFrame
         jPopupMenu = new javax.swing.JPopupMenu();
         jMenuItemSelectAll = new javax.swing.JMenuItem();
         jMenuItemCopy = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemSaveFav = new javax.swing.JMenuItem();
         jTabbedPane = new javax.swing.JTabbedPane();
         jPanelList = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -227,6 +229,7 @@ public class FrontForm extends javax.swing.JFrame
         jMenuItemCompire = new javax.swing.JMenuItem();
         jMenuItemDynamics = new javax.swing.JMenuItem();
         jMenuItemTrafficDia = new javax.swing.JMenuItem();
+        jMenuItemExportCsv = new javax.swing.JMenuItem();
         jMenuSettings = new javax.swing.JMenu();
         jMenuItemMainSettings = new javax.swing.JMenuItem();
         jMenuInfo = new javax.swing.JMenu();
@@ -263,22 +266,41 @@ public class FrontForm extends javax.swing.JFrame
             }
         });
         jPopupMenu.add(jMenuItemCopy);
+        jPopupMenu.add(jSeparator1);
+
+        jMenuItemSaveFav.setLabel("Запись Favorite.xml");
+        jMenuItemSaveFav.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItemSaveFavActionPerformed(evt);
+            }
+        });
+        jPopupMenu.add(jMenuItemSaveFav);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tblInfo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
             {
-                {},
-                {},
-                {},
-                {}
+
             },
             new String []
             {
-
+                "", "", "", ""
             }
-        ));
+        )
+        {
+            Class[] types = new Class []
+            {
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex)
+            {
+                return types [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(tblInfo);
 
         javax.swing.GroupLayout jPanelListLayout = new javax.swing.GroupLayout(jPanelList);
@@ -410,6 +432,9 @@ public class FrontForm extends javax.swing.JFrame
         jMenuItemTrafficDia.setText("Диаграмма трафика");
         jMenuAnalysis.add(jMenuItemTrafficDia);
 
+        jMenuItemExportCsv.setLabel("Экспорт в CSV");
+        jMenuAnalysis.add(jMenuItemExportCsv);
+
         jMenuBar1.add(jMenuAnalysis);
 
         jMenuSettings.setText("Сервис");
@@ -449,7 +474,7 @@ public class FrontForm extends javax.swing.JFrame
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
+            .addComponent(jTabbedPane)
         );
 
         pack();
@@ -525,6 +550,11 @@ public class FrontForm extends javax.swing.JFrame
     {//GEN-HEADEREND:event_jMenuDhtUploadActionPerformed
         jTabbedPane.setSelectedComponent(jPanelList);
     }//GEN-LAST:event_jMenuDhtUploadActionPerformed
+
+    private void jMenuItemSaveFavActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemSaveFavActionPerformed
+    {//GEN-HEADEREND:event_jMenuItemSaveFavActionPerformed
+        
+    }//GEN-LAST:event_jMenuItemSaveFavActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog jDialog1;
@@ -539,7 +569,9 @@ public class FrontForm extends javax.swing.JFrame
     private javax.swing.JMenuItem jMenuItemCompire;
     private javax.swing.JMenuItem jMenuItemCopy;
     private javax.swing.JMenuItem jMenuItemDynamics;
+    private javax.swing.JMenuItem jMenuItemExportCsv;
     private javax.swing.JMenuItem jMenuItemMainSettings;
+    private javax.swing.JMenuItem jMenuItemSaveFav;
     private javax.swing.JMenuItem jMenuItemSelectAll;
     private javax.swing.JMenuItem jMenuItemTrafficDia;
     private javax.swing.JMenu jMenuLabelPath;
@@ -553,6 +585,7 @@ public class FrontForm extends javax.swing.JFrame
     private javax.swing.JPanel jPanelVisual;
     private javax.swing.JPopupMenu jPopupMenu;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane;
     protected javax.swing.JTable tblInfo;
     // End of variables declaration//GEN-END:variables
