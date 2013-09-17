@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -553,7 +554,16 @@ public class FrontForm extends javax.swing.JFrame
 
     private void jMenuItemSaveFavActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemSaveFavActionPerformed
     {//GEN-HEADEREND:event_jMenuItemSaveFavActionPerformed
-        
+        ArrayList<TFavoriteValues> data = new ArrayList<TFavoriteValues>();
+        for(int i = 0, n = tblInfo.getRowCount(); i < n; ++i){
+            data.add(new TFavoriteValues(tblInfo.getValueAt(i, 1).toString(), (boolean)tblInfo.getValueAt(i, 0)));
+        }
+        if(Export.favoriteXmlActivate(data.toArray(new TFavoriteValues[data.size()]))){
+            JOptionPane.showMessageDialog(null, 
+                                            "saved to /Settings/",
+                                            "",
+                                            JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_jMenuItemSaveFavActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
