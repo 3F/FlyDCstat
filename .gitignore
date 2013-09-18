@@ -3,4 +3,7 @@
 /*.log
 /build.num
 /*.sqlite
+/*.sqlite-shm
+/*.sqlite-wal
 /nbproject/private
+/Settings

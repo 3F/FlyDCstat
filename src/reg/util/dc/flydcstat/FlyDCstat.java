@@ -40,16 +40,18 @@ public class FlyDCstat
             System.exit(IllegalOperationException.EXIT_CODE_CONFIG_READ_ERROR);
         }
         
-        String dbName = (args.length > 0)? args[0].trim() : null;
-        run(dbName, new Locale("ru", "RU")); //TODO: switch locale
+        Config.load();
+        String dbName = (args.length > 0)? args[0].trim() : Config.data.dbPath;
+        Config.uimsg = ResourceBundle.getBundle("reg/util/dc/flydcstat/i18n/MessagesGUI", new Locale("ru", "RU")); //TODO: switch locale
+        run(dbName);
     }
     
-    private static void run(String dbName, Locale locale)
+    private static void run(String dbName)
     {
         Dbases db       = new Dbases(dbName);
         FrontForm frm   = new FrontForm();
         try{
-            new StatController(db, frm, ResourceBundle.getBundle("reg/util/dc/flydcstat/i18n/MessagesGUI", locale));
+            new StatController(db, frm);
         }
         catch(IllegalOperationException e){
             logger.log(Level.SEVERE, "cannot start application", e);

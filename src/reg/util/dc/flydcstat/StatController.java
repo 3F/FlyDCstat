@@ -16,11 +16,16 @@
 
 package reg.util.dc.flydcstat;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import reg.util.dc.flydcstat.exceptions.IllegalOperationException;
 
@@ -30,18 +35,27 @@ import reg.util.dc.flydcstat.exceptions.IllegalOperationException;
  */
 public class StatController
 {
+    public enum TStat
+    {
+        DownloadHub,
+        DownloadNick,
+        UploadHub,
+        UploadNick,
+        DhtDownload,
+        DhtUpload,
+        RatingAll,
+        VisualData
+    }
+    
     private Dbases dBases   = null;
     private FrontForm view  = null;
-    /**
-     * UI messages
-     */
-    private ResourceBundle uimsg;
     
-    public StatController(Dbases db, FrontForm frm, ResourceBundle messages) throws IllegalOperationException
+    public static TStat lastHandledStat;
+    
+    public StatController(Dbases db, FrontForm frm) throws IllegalOperationException
     {
         this.dBases     = db;
         this.view       = frm;
-        this.uimsg      = messages;
         
         init();
         setHandlers();
@@ -52,45 +66,93 @@ public class StatController
         String path = dBases.getDbName();
         if(!dBases.tryToConnect()){
             JOptionPane.showMessageDialog(null, 
-                                            uimsg.getString("db_notaccess").replace("%path%", path),
-                                            uimsg.getString("db_notaccess_title"),
+                                            Config.uimsg.getString("db_notaccess").replace("%path%", path),
+                                            Config.uimsg.getString("db_notaccess_title"),
                                             JOptionPane.ERROR_MESSAGE);
             
             throw new IllegalOperationException("["+ path +"] no read access", IllegalOperationException.EXIT_CODE_DB_NOT_ACCESS);
         }
         
-        view.i18n(uimsg);
-        view.setLabelDbPath((new java.io.File(path)).getAbsolutePath(), uimsg.getString("menu_label_path"));
+        view.i18n();
+        view.setLabelDbPath((new java.io.File(path)).getAbsolutePath(), Config.uimsg.getString("menu_label_path"));
         view.setVisible(true);
     }
     
     /**
      * Wrapper events handler
      */
-    private void warpperActionPerformed(String title, String[] columns, ArrayList<ArrayList<Object>> rows)
+    private void warpperActionPerformed(TStat tstat, String[] columns, ArrayList<ArrayList<Object>> rows)
     {
-        view.setTitle(title);
+        lastHandledStat = tstat;
+        view.setTitle(_getTitleByStat(tstat));
+        
+        if(tstat == TStat.DownloadHub || tstat == TStat.UploadHub){
+            view.tblInfo.setModel(view.tableModelBolleanFirst());
+        }
+        else{
+            view.tblInfo.setModel(view.tableModelObjectAll());
+        }
 
         DefaultTableModel tblModel = (DefaultTableModel)view.tblInfo.getModel();
         //erase all columns
         tblModel.setColumnCount(0);
         //erase all rows
-        tblModel.setRowCount(0);     
+        tblModel.setRowCount(0);
+        
         //place new
+        if(tstat == TStat.DownloadHub || tstat == TStat.UploadHub){
+            tblModel.addColumn(""); //for checkbox, see model of tableModelBolleanFirst
+            view.tblInfo.getColumnModel().getColumn(0).setMaxWidth(24);
+        }
         for(String column: columns){
             tblModel.addColumn(column);
         }
+        if(tstat == TStat.DownloadHub || tstat == TStat.UploadHub){
+            view.tblInfo.getColumnModel().getColumn(0).setMaxWidth(24);
+        }        
         
         if(rows.size() < 1){
             JOptionPane.showMessageDialog(view,
-                                            uimsg.getString("stat_norecord"),
-                                            uimsg.getString("stat_norecord_title"),
+                                            Config.uimsg.getString("stat_norecord"),
+                                            Config.uimsg.getString("stat_norecord_title"),
                                             JOptionPane.WARNING_MESSAGE);
             return;
         }
         for(ArrayList<Object> row: rows){
             tblModel.addRow(row.toArray());
         }
+    }
+    
+    private String _getTitleByStat(TStat tstat)
+    {
+        switch(tstat)
+        {
+            case DhtDownload:{
+                return Config.uimsg.getString("stat_download_dht_wtitle");
+            }
+            case DhtUpload:{
+                return Config.uimsg.getString("stat_upload_dht_wtitle");
+            }
+            case DownloadHub:{
+                return Config.uimsg.getString("stat_download_hub_wtitle");
+            }
+            case DownloadNick:{
+                return Config.uimsg.getString("stat_download_nick_wtitle");
+            }
+            case RatingAll:{
+                return Config.uimsg.getString("stat_rating_total");
+            }
+            case UploadHub:{
+                return Config.uimsg.getString("stat_upload_hub_wtitle");
+            }
+            case UploadNick:{
+                return Config.uimsg.getString("stat_upload_nick_wtitle");
+            }
+            case VisualData:{
+                break;
+            }
+        }
+        return "";
     }
     
     /**
@@ -103,10 +165,10 @@ public class StatController
         {
             ArrayList<ArrayList<Object>> rows = dBases.statTrafficByHub(Dbases.TGroupStatistic.Download, Dbases.TSorted.DESC);
             String[] columns                  = new String[]{
-                uimsg.getString("column_hub"),
-                uimsg.getString("column_download")
+                Config.uimsg.getString("column_hub"),
+                Config.uimsg.getString("column_download")
             };
-            warpperActionPerformed(uimsg.getString("stat_download_hub_wtitle"), columns, rows);
+            warpperActionPerformed(TStat.DownloadHub, columns, rows);
         }
     }
     
@@ -120,10 +182,10 @@ public class StatController
         {
             ArrayList<ArrayList<Object>> rows = dBases.statTrafficByHub(Dbases.TGroupStatistic.Upload, Dbases.TSorted.DESC);
             String[] columns                  = new String[]{
-                uimsg.getString("column_hub"),
-                uimsg.getString("column_upload")
+                Config.uimsg.getString("column_hub"),
+                Config.uimsg.getString("column_upload")
             };
-            warpperActionPerformed(uimsg.getString("stat_upload_hub_wtitle"), columns, rows);
+            warpperActionPerformed(TStat.UploadHub, columns, rows);
         }
     }    
     
@@ -137,10 +199,10 @@ public class StatController
         {
             ArrayList<ArrayList<Object>> rows = dBases.statTrafficByNick(Dbases.TGroupStatistic.Download, Dbases.TSorted.DESC);
             String[] columns                  = new String[]{
-                uimsg.getString("column_nick"),
-                uimsg.getString("column_download")
+                Config.uimsg.getString("column_nick"),
+                Config.uimsg.getString("column_download")
             };
-            warpperActionPerformed(uimsg.getString("stat_download_nick_wtitle"), columns, rows);
+            warpperActionPerformed(TStat.DownloadNick, columns, rows);
         }
     }
     
@@ -154,10 +216,10 @@ public class StatController
         {
             ArrayList<ArrayList<Object>> rows = dBases.statTrafficByNick(Dbases.TGroupStatistic.Upload, Dbases.TSorted.DESC);
             String[] columns                  = new String[]{
-                uimsg.getString("column_nick"),
-                uimsg.getString("column_upload")
+                Config.uimsg.getString("column_nick"),
+                Config.uimsg.getString("column_upload")
             };
-            warpperActionPerformed(uimsg.getString("stat_upload_nick_wtitle"), columns, rows);
+            warpperActionPerformed(TStat.UploadNick, columns, rows);
         }
     }
     
@@ -171,11 +233,11 @@ public class StatController
         {
             ArrayList<ArrayList<Object>> rows = dBases.statDhtTraffic(Dbases.TGroupStatistic.Download, Dbases.TSorted.DESC);
             String[] columns                  = new String[]{
-                uimsg.getString("column_nick"),
-                uimsg.getString("column_download"),
-                uimsg.getString("column_ip")
+                Config.uimsg.getString("column_nick"),
+                Config.uimsg.getString("column_download"),
+                Config.uimsg.getString("column_ip")
             };
-            warpperActionPerformed(uimsg.getString("stat_download_dht_wtitle"), columns, rows);
+            warpperActionPerformed(TStat.DhtDownload, columns, rows);
         }
     }
     
@@ -189,11 +251,11 @@ public class StatController
         {
             ArrayList<ArrayList<Object>> rows = dBases.statDhtTraffic(Dbases.TGroupStatistic.Upload, Dbases.TSorted.DESC);
             String[] columns                  = new String[]{
-                uimsg.getString("column_nick"),
-                uimsg.getString("column_upload"),
-                uimsg.getString("column_ip")
+                Config.uimsg.getString("column_nick"),
+                Config.uimsg.getString("column_upload"),
+                Config.uimsg.getString("column_ip")
             };
-            warpperActionPerformed(uimsg.getString("stat_upload_dht_wtitle"), columns, rows);
+            warpperActionPerformed(TStat.DhtUpload, columns, rows);
         }
     }    
 
@@ -207,13 +269,68 @@ public class StatController
         {
             ArrayList<ArrayList<Object>> rows = dBases.statRatingAll();
             String[] columns                  = new String[]{
-                uimsg.getString("column_upload"),
-                uimsg.getString("column_download"),
-                uimsg.getString("column_rating")
+                Config.uimsg.getString("column_upload"),
+                Config.uimsg.getString("column_download"),
+                Config.uimsg.getString("column_rating")
             };
-            warpperActionPerformed(uimsg.getString("stat_rating_total"), columns, rows);
+            warpperActionPerformed(TStat.RatingAll, columns, rows);
         }
     }
+       
+    private class visualDataFocus implements ChangeListener
+    {
+        @Override
+        public void stateChanged(ChangeEvent e)
+        {
+            lastHandledStat = TStat.VisualData;
+            if(e.getSource() instanceof JTabbedPane){
+                JTabbedPane pane = (JTabbedPane)e.getSource();
+                if(pane.getSelectedIndex() == 0){ // also getSelectedComponent
+                    return;
+                }
+                
+                ((JpanelGraphics)view.jPanelDia).effectiveValueD = fillData(
+                                                                        dBases.statTrafficByHubPairRaw(
+                                                                                    Dbases.TGroupStatistic.Download, 
+                                                                                    Dbases.TSorted.DESC), 
+                                                                        0.04f, 
+                                                                        new Color(122, 139, 51, 150));
+                
+                ((JpanelGraphics)view.jPanelDia).effectiveValueU = fillData(
+                                                                        dBases.statTrafficByHubPairRaw(
+                                                                                    Dbases.TGroupStatistic.Upload, 
+                                                                                    Dbases.TSorted.DESC), 
+                                                                        0.01f, 
+                                                                        new Color(116, 56, 62, 150));
+            }
+        }
+        
+        protected PieValues[] fillData(ArrayList<Dbases.TPairDataRaw> data, float range, Color cMain)
+        {
+            if(data == null){
+                return null;
+            }
+            
+            ArrayList<PieValues> effValues = new ArrayList<>();
+            long sum = 0;
+            for(Dbases.TPairDataRaw value: data){
+                sum += value.sum;
+            }
+
+            effValues.add(null);
+            long sumDefect = 0;
+            for(Dbases.TPairDataRaw value: data){
+                float percent = (float)((double)value.sum / (double)sum);
+                if(value.sum > 0 && percent < range){
+                    sumDefect += value.sum;
+
+                    effValues.add(new PieValues((percent * 100f), Dbases.formatSize(Long.valueOf(value.sum)) + " :: " + value.text));
+                }
+            }
+            effValues.set(0, (new PieValues(((float)((1 - (double)sumDefect / (double)sum)) * 100f), "Main", cMain)));
+            return effValues.toArray(new PieValues[effValues.size()]);
+        }
+    }    
     
     private void setHandlers()
     {
@@ -224,5 +341,6 @@ public class StatController
         view.listnerDhtDownload(new actionDhtDownload());
         view.listnerDhtUpload(new actionDhtUpload());
         view.listnerRatingAll(new actionRatingAll());
+        view.listnerVisualData(new visualDataFocus());
     }    
 }
