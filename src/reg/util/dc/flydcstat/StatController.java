@@ -49,18 +49,13 @@ public class StatController
     
     private Dbases dBases   = null;
     private FrontForm view  = null;
-    /**
-     * UI messages
-     */
-    private ResourceBundle uimsg;
     
     public static TStat lastHandledStat;
     
-    public StatController(Dbases db, FrontForm frm, ResourceBundle messages) throws IllegalOperationException
+    public StatController(Dbases db, FrontForm frm) throws IllegalOperationException
     {
         this.dBases     = db;
         this.view       = frm;
-        this.uimsg      = messages;
         
         init();
         setHandlers();
@@ -71,15 +66,15 @@ public class StatController
         String path = dBases.getDbName();
         if(!dBases.tryToConnect()){
             JOptionPane.showMessageDialog(null, 
-                                            uimsg.getString("db_notaccess").replace("%path%", path),
-                                            uimsg.getString("db_notaccess_title"),
+                                            Config.uimsg.getString("db_notaccess").replace("%path%", path),
+                                            Config.uimsg.getString("db_notaccess_title"),
                                             JOptionPane.ERROR_MESSAGE);
             
             throw new IllegalOperationException("["+ path +"] no read access", IllegalOperationException.EXIT_CODE_DB_NOT_ACCESS);
         }
         
-        view.i18n(uimsg);
-        view.setLabelDbPath((new java.io.File(path)).getAbsolutePath(), uimsg.getString("menu_label_path"));
+        view.i18n();
+        view.setLabelDbPath((new java.io.File(path)).getAbsolutePath(), Config.uimsg.getString("menu_label_path"));
         view.setVisible(true);
     }
     
@@ -118,8 +113,8 @@ public class StatController
         
         if(rows.size() < 1){
             JOptionPane.showMessageDialog(view,
-                                            uimsg.getString("stat_norecord"),
-                                            uimsg.getString("stat_norecord_title"),
+                                            Config.uimsg.getString("stat_norecord"),
+                                            Config.uimsg.getString("stat_norecord_title"),
                                             JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -133,25 +128,25 @@ public class StatController
         switch(tstat)
         {
             case DhtDownload:{
-                return uimsg.getString("stat_download_dht_wtitle");
+                return Config.uimsg.getString("stat_download_dht_wtitle");
             }
             case DhtUpload:{
-                return uimsg.getString("stat_upload_dht_wtitle");
+                return Config.uimsg.getString("stat_upload_dht_wtitle");
             }
             case DownloadHub:{
-                return uimsg.getString("stat_download_hub_wtitle");
+                return Config.uimsg.getString("stat_download_hub_wtitle");
             }
             case DownloadNick:{
-                return uimsg.getString("stat_download_nick_wtitle");
+                return Config.uimsg.getString("stat_download_nick_wtitle");
             }
             case RatingAll:{
-                return uimsg.getString("stat_rating_total");
+                return Config.uimsg.getString("stat_rating_total");
             }
             case UploadHub:{
-                return uimsg.getString("stat_upload_hub_wtitle");
+                return Config.uimsg.getString("stat_upload_hub_wtitle");
             }
             case UploadNick:{
-                return uimsg.getString("stat_upload_nick_wtitle");
+                return Config.uimsg.getString("stat_upload_nick_wtitle");
             }
             case VisualData:{
                 break;
@@ -170,8 +165,8 @@ public class StatController
         {
             ArrayList<ArrayList<Object>> rows = dBases.statTrafficByHub(Dbases.TGroupStatistic.Download, Dbases.TSorted.DESC);
             String[] columns                  = new String[]{
-                uimsg.getString("column_hub"),
-                uimsg.getString("column_download")
+                Config.uimsg.getString("column_hub"),
+                Config.uimsg.getString("column_download")
             };
             warpperActionPerformed(TStat.DownloadHub, columns, rows);
         }
@@ -187,8 +182,8 @@ public class StatController
         {
             ArrayList<ArrayList<Object>> rows = dBases.statTrafficByHub(Dbases.TGroupStatistic.Upload, Dbases.TSorted.DESC);
             String[] columns                  = new String[]{
-                uimsg.getString("column_hub"),
-                uimsg.getString("column_upload")
+                Config.uimsg.getString("column_hub"),
+                Config.uimsg.getString("column_upload")
             };
             warpperActionPerformed(TStat.UploadHub, columns, rows);
         }
@@ -204,8 +199,8 @@ public class StatController
         {
             ArrayList<ArrayList<Object>> rows = dBases.statTrafficByNick(Dbases.TGroupStatistic.Download, Dbases.TSorted.DESC);
             String[] columns                  = new String[]{
-                uimsg.getString("column_nick"),
-                uimsg.getString("column_download")
+                Config.uimsg.getString("column_nick"),
+                Config.uimsg.getString("column_download")
             };
             warpperActionPerformed(TStat.DownloadNick, columns, rows);
         }
@@ -221,8 +216,8 @@ public class StatController
         {
             ArrayList<ArrayList<Object>> rows = dBases.statTrafficByNick(Dbases.TGroupStatistic.Upload, Dbases.TSorted.DESC);
             String[] columns                  = new String[]{
-                uimsg.getString("column_nick"),
-                uimsg.getString("column_upload")
+                Config.uimsg.getString("column_nick"),
+                Config.uimsg.getString("column_upload")
             };
             warpperActionPerformed(TStat.UploadNick, columns, rows);
         }
@@ -238,9 +233,9 @@ public class StatController
         {
             ArrayList<ArrayList<Object>> rows = dBases.statDhtTraffic(Dbases.TGroupStatistic.Download, Dbases.TSorted.DESC);
             String[] columns                  = new String[]{
-                uimsg.getString("column_nick"),
-                uimsg.getString("column_download"),
-                uimsg.getString("column_ip")
+                Config.uimsg.getString("column_nick"),
+                Config.uimsg.getString("column_download"),
+                Config.uimsg.getString("column_ip")
             };
             warpperActionPerformed(TStat.DhtDownload, columns, rows);
         }
@@ -256,9 +251,9 @@ public class StatController
         {
             ArrayList<ArrayList<Object>> rows = dBases.statDhtTraffic(Dbases.TGroupStatistic.Upload, Dbases.TSorted.DESC);
             String[] columns                  = new String[]{
-                uimsg.getString("column_nick"),
-                uimsg.getString("column_upload"),
-                uimsg.getString("column_ip")
+                Config.uimsg.getString("column_nick"),
+                Config.uimsg.getString("column_upload"),
+                Config.uimsg.getString("column_ip")
             };
             warpperActionPerformed(TStat.DhtUpload, columns, rows);
         }
@@ -274,9 +269,9 @@ public class StatController
         {
             ArrayList<ArrayList<Object>> rows = dBases.statRatingAll();
             String[] columns                  = new String[]{
-                uimsg.getString("column_upload"),
-                uimsg.getString("column_download"),
-                uimsg.getString("column_rating")
+                Config.uimsg.getString("column_upload"),
+                Config.uimsg.getString("column_download"),
+                Config.uimsg.getString("column_rating")
             };
             warpperActionPerformed(TStat.RatingAll, columns, rows);
         }

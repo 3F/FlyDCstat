@@ -223,28 +223,28 @@ public class FrontForm extends javax.swing.JFrame
      * rendering of internationalization
      * @param uimsg 
      */
-    public void i18n(ResourceBundle uimsg)
+    public void i18n()
     {
-        jMenuSelectType.setText(uimsg.getString("menu_type"));
-        jMenuSettings.setText(uimsg.getString("menu_settings"));
-        jMenuDownloadHub.setText(uimsg.getString("menu_download_hub"));
-        jMenuUploadHub.setText(uimsg.getString("menu_upload_hub"));
-        jMenuDownloadNick.setText(uimsg.getString("menu_download_nick"));
-        jMenuUploadNick.setText(uimsg.getString("menu_upload_nick"));
-        jMenuDhtDownload.setText(uimsg.getString("menu_dht_download"));
-        jMenuDhtUpload.setText(uimsg.getString("menu_dht_upload"));
-        jMenuRatingAll.setText(uimsg.getString("menu_total_rating"));        
-        jMenuAnalysis.setText(uimsg.getString("menu_analisis"));
-        jMenuItemCompire.setText(uimsg.getString("menu_analisis_eff"));
-        jMenuItemDynamics.setText(uimsg.getString("menu_analisis_dynamic"));
-        jMenuItemTrafficDia.setText(uimsg.getString("menu_analisis_traffic"));
-        jMenuItemExportCsv.setText(uimsg.getString("menu_analisis_csv"));        
-        jMenuSettings.setText(uimsg.getString("menu_service"));
-        jMenuItemMainSettings.setText(uimsg.getString("menu_service_param"));        
-        jMenuInfo.setText(uimsg.getString("menu_info"));
-        jMenuItemSelectAll.setText(uimsg.getString("popmenu_selectall"));
-        jMenuItemCopy.setText(uimsg.getString("popmenu_copy"));        
-        jMenuItemSaveFav.setText(uimsg.getString("popmenu_save_fav")); 
+        jMenuSelectType.setText(Config.uimsg.getString("menu_type"));
+        jMenuSettings.setText(Config.uimsg.getString("menu_settings"));
+        jMenuDownloadHub.setText(Config.uimsg.getString("menu_download_hub"));
+        jMenuUploadHub.setText(Config.uimsg.getString("menu_upload_hub"));
+        jMenuDownloadNick.setText(Config.uimsg.getString("menu_download_nick"));
+        jMenuUploadNick.setText(Config.uimsg.getString("menu_upload_nick"));
+        jMenuDhtDownload.setText(Config.uimsg.getString("menu_dht_download"));
+        jMenuDhtUpload.setText(Config.uimsg.getString("menu_dht_upload"));
+        jMenuRatingAll.setText(Config.uimsg.getString("menu_total_rating"));        
+        jMenuAnalysis.setText(Config.uimsg.getString("menu_analisis"));
+        jMenuItemCompire.setText(Config.uimsg.getString("menu_analisis_eff"));
+        jMenuItemDynamics.setText(Config.uimsg.getString("menu_analisis_dynamic"));
+        jMenuItemTrafficDia.setText(Config.uimsg.getString("menu_analisis_traffic"));
+        jMenuItemExportCsv.setText(Config.uimsg.getString("menu_analisis_csv"));        
+        jMenuSettings.setText(Config.uimsg.getString("menu_service"));
+        jMenuItemMainSettings.setText(Config.uimsg.getString("menu_service_param"));        
+        jMenuInfo.setText(Config.uimsg.getString("menu_info"));
+        jMenuItemSelectAll.setText(Config.uimsg.getString("popmenu_selectall"));
+        jMenuItemCopy.setText(Config.uimsg.getString("popmenu_copy"));        
+        jMenuItemSaveFav.setText(Config.uimsg.getString("popmenu_save_fav")); 
     }
 
     /**
@@ -615,14 +615,14 @@ public class FrontForm extends javax.swing.JFrame
         }
         if(Export.favoriteXmlActivate(data.toArray(new TFavoriteValues[data.size()]))){
             JOptionPane.showMessageDialog(null, 
-                                            "saved to /Settings/",
-                                            "",
+                                            String.format(Config.uimsg.getString("alert_favsave_success"), Config.getWorkPath() + "/"),
+                                            Config.uimsg.getString("alert_favsave_title"),
                                             JOptionPane.INFORMATION_MESSAGE);
         }
         else{
             JOptionPane.showMessageDialog(null, 
-                                "problem to save",
-                                "",
+                                Config.uimsg.getString("alert_favsave_fail"),
+                                Config.uimsg.getString("alert_favsave_title"),
                                 JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jMenuItemSaveFavActionPerformed

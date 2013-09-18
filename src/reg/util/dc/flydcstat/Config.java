@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.ResourceBundle;
 
 /**
  * https://bitbucket.org/3F/vssolutionbuildevent/src/e0867b0793bc556d0e03e263001ea32b9d9e3531/vsSolutionBuildEvent/Config.cs
@@ -34,6 +35,11 @@ import java.util.Date;
 public class Config
 {
     public static Settings data = null;
+    /**
+     * UI messages
+     */
+    public static ResourceBundle uimsg;
+    
     private static String _path = "config";
 
     public static void load()
@@ -98,7 +104,12 @@ public class Config
             SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss.S");
             fav = String.format("%s_%s.xml", data.favoriteXml, date.format(new Date()));
         }
-        return data.dbPath.substring(0, data.dbPath.lastIndexOf("/")) + "/" + fav;
+        return getWorkPath() + "/" + fav;
+    }
+    
+    public static String getWorkPath()
+    {
+        return data.dbPath.substring(0, data.dbPath.lastIndexOf("/"));
     }    
 
     protected Config(){}
