@@ -19,11 +19,11 @@ package reg.util.dc.flydcstat;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -112,13 +112,30 @@ public class StatController
         }        
         
         if(rows.size() < 1){
-            JOptionPane.showMessageDialog(view,
-                                            Config.uimsg.getString("stat_norecord"),
-                                            Config.uimsg.getString("stat_norecord_title"),
-                                            JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(view, Config.uimsg.getString("stat_norecord"),
+                                                Config.uimsg.getString("stat_norecord_title"),
+                                                JOptionPane.WARNING_MESSAGE);
             return;
         }
+        
+        FavoriteXml fav = null;
+        try{
+            WorkPathHelper w = new WorkPathHelper(Config.getWorkPath());
+            fav = new FavoriteXml(w.getFavoriteFile(Config.data.favoriteXml));
+        }
+        catch(IOException e){
+            FlyDCstat.logger.log(Level.SEVERE, "checking autoload-status", e);
+            //TODO:
+        }
+        
         for(ArrayList<Object> row: rows){
+            if(tstat == TStat.DownloadHub || tstat == TStat.UploadHub){
+                if(fav != null){
+                    if(!fav.isAutoloadHub(row.get(1).toString())){
+                        row.set(0, false);
+                    }
+                }
+            }
             tblModel.addRow(row.toArray());
         }
     }

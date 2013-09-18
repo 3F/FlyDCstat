@@ -17,30 +17,19 @@
 
 package reg.util.dc.flydcstat;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Export
-{    
-    public static boolean favoriteXmlActivate(TFavoriteValues[] favorites)
+{
+    public static boolean favoriteXmlActivate(FavoriteXml.TShortValues[] favorites)
     {
         try{
-            String data = _getFavoriteFile();
-            for(TFavoriteValues fav : favorites){
-                //TODO: жадность - "(\\sconnect\\s*=\\s*)\"\\d\"(.+?Server.+?"+fav.name+")" либо:
-                String r = "(\\sConnect\\s*=\\s*\")\\d(\"\\s*Description\\s*=\\s*\"[^\"]*\"\\s*Nick\\s*=\\s*\"[^\"]*\"\\s*Password\\s*=\\s*\"[^\"]*\"\\s*Server\\s*=\\s*\"[A-z\\s:/\\\\]*"+fav.name.trim()+")";
-                Pattern pat = Pattern.compile(r, Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
-                //"$1\\Q0\\E$2"
-                data = pat.matcher(data).replaceFirst("$1" + Matcher.quoteReplacement((fav.autoload)?"1":"0") + "$2");
+            WorkPathHelper w = new WorkPathHelper(Config.getWorkPath());
+            FavoriteXml fav = new FavoriteXml(w.getFavoriteFile(Config.data.favoriteXml));
+            if(!fav.replaceParamConnect(favorites)){
+                return false;
             }
-            _saveFavoriteFile(data, Config.getFavoriteXml(true));
+            w.saveFavoriteFile(fav.getData(), Config.getFavoriteXml(true));
             return true;
         }
         catch(IOException e){
@@ -52,37 +41,5 @@ public class Export
     public static boolean csv()
     {
         return false;
-    }
-    
-    private static String _getFavoriteFile() throws IOException
-    {
-        String ret;
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(Config.getFavoriteXml(false)), "UTF-8"))) {
-            ret = "";
-            String line;
-            while((line = reader.readLine()) != null){
-                ret += line + System.getProperty("line.separator");
-            }
-        }
-        return ret;
-    }
-    
-    private static void _saveFavoriteFile(String data, String name) throws IOException
-    {
-        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(name), "UTF-8"))) {
-            out.write(data);
-        }        
-    }
-}
-
-class TFavoriteValues
-{
-    public String name;
-    public boolean autoload;
-
-    public TFavoriteValues(String name, boolean activate)
-    {
-        this.name = name;
-        autoload  = activate;
     }
 }
