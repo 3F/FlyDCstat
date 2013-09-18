@@ -24,7 +24,6 @@ import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import javax.swing.JOptionPane;
@@ -38,6 +37,7 @@ class JpanelGraphics extends JPanel
     public PieValues[] effectiveValueD = null;
     public PieValues[] effectiveValueU = null;
     
+    @Override
     public void paint(Graphics g)
     {
         //TODO:
@@ -193,6 +193,7 @@ public class FrontForm extends javax.swing.JFrame
                 java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
@@ -213,6 +214,7 @@ public class FrontForm extends javax.swing.JFrame
                 java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
@@ -609,11 +611,11 @@ public class FrontForm extends javax.swing.JFrame
 
     private void jMenuItemSaveFavActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemSaveFavActionPerformed
     {//GEN-HEADEREND:event_jMenuItemSaveFavActionPerformed
-        ArrayList<TFavoriteValues> data = new ArrayList<>();
+        ArrayList<FavoriteXml.TShortValues> data = new ArrayList<>();
         for(int i = 0, n = tblInfo.getRowCount(); i < n; ++i){
-            data.add(new TFavoriteValues(tblInfo.getValueAt(i, 1).toString(), (boolean)tblInfo.getValueAt(i, 0)));
+            data.add(new FavoriteXml.TShortValues(tblInfo.getValueAt(i, 1).toString(), (boolean)tblInfo.getValueAt(i, 0)));
         }
-        if(Export.favoriteXmlActivate(data.toArray(new TFavoriteValues[data.size()]))){
+        if(Export.favoriteXmlActivate(data.toArray(new FavoriteXml.TShortValues[data.size()]))){
             JOptionPane.showMessageDialog(null, 
                                             String.format(Config.uimsg.getString("alert_favsave_success"), Config.getWorkPath() + "/"),
                                             Config.uimsg.getString("alert_favsave_title"),

@@ -26,7 +26,7 @@ import reg.util.dc.flydcstat.exceptions.IllegalOperationException;
 
 public class FlyDCstat
 {
-    private final static Logger logger = Logger.getLogger(FlyDCstat.class.getPackage().getName());
+    protected final static Logger logger = Logger.getLogger(FlyDCstat.class.getPackage().getName());
     
     public static void main(String[] args)
     {
