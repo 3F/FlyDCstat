@@ -54,6 +54,8 @@ public class StatController
      */
     private ResourceBundle uimsg;
     
+    public static TStat lastHandledStat;
+    
     public StatController(Dbases db, FrontForm frm, ResourceBundle messages) throws IllegalOperationException
     {
         this.dBases     = db;
@@ -86,6 +88,7 @@ public class StatController
      */
     private void warpperActionPerformed(TStat tstat, String[] columns, ArrayList<ArrayList<Object>> rows)
     {
+        lastHandledStat = tstat;
         view.setTitle(_getTitleByStat(tstat));
         
         if(tstat == TStat.DownloadHub || tstat == TStat.UploadHub){
@@ -284,6 +287,7 @@ public class StatController
         @Override
         public void stateChanged(ChangeEvent e)
         {
+            lastHandledStat = TStat.VisualData;
             if(e.getSource() instanceof JTabbedPane){
                 JTabbedPane pane = (JTabbedPane)e.getSource();
                 if(pane.getSelectedIndex() == 0){ // also getSelectedComponent

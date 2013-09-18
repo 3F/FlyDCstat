@@ -289,6 +289,20 @@ public class FrontForm extends javax.swing.JFrame
             .addGap(0, 300, Short.MAX_VALUE)
         );
 
+        jPopupMenu.addPopupMenuListener(new javax.swing.event.PopupMenuListener()
+        {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt)
+            {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt)
+            {
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt)
+            {
+                jPopupMenuPopupMenuWillBecomeVisible(evt);
+            }
+        });
+
         jMenuItemSelectAll.setText("Выделить все");
         jMenuItemSelectAll.addActionListener(new java.awt.event.ActionListener()
         {
@@ -601,6 +615,18 @@ public class FrontForm extends javax.swing.JFrame
                                 JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jMenuItemSaveFavActionPerformed
+
+    private void jPopupMenuPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt)//GEN-FIRST:event_jPopupMenuPopupMenuWillBecomeVisible
+    {//GEN-HEADEREND:event_jPopupMenuPopupMenuWillBecomeVisible
+        if(StatController.lastHandledStat != StatController.TStat.DownloadHub && 
+           StatController.lastHandledStat != StatController.TStat.UploadHub)
+        {
+            jMenuItemSaveFav.setEnabled(false);
+        }
+        else{
+            jMenuItemSaveFav.setEnabled(true);
+        }
+    }//GEN-LAST:event_jPopupMenuPopupMenuWillBecomeVisible
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog jDialog1;
