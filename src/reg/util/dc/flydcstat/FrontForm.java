@@ -540,21 +540,9 @@ public class FrontForm extends javax.swing.JFrame
 
     private void jMenuItemAboutActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemAboutActionPerformed
     {//GEN-HEADEREND:event_jMenuItemAboutActionPerformed
-        String version = "";
-        try{
-            InputStream stream      = getClass().getResourceAsStream("/META-INF/MANIFEST.MF");
-            Manifest manifest       = new Manifest(stream);
-            Attributes attributes   = manifest.getMainAttributes();
-            String specVersion      = attributes.getValue("Specification-Version");
-            if(specVersion != null){
-                version = String.format("v%s-%s", specVersion, attributes.getValue("Implementation-Version"));
-            }
-        }
-        catch(Exception e){}
         JOptionPane.showMessageDialog(null, 
-                        "entry.reg@gmail.com\nsee detail on:\nhttps://bitbucket.org/3F\n" + 
-                        "\nThis product includes SQLiteJDBC (xerial.org)",
-                        version,
+                        Config.uimsg.getString("about_main"),
+                        String.format("v%s [%s]", Version.specification, Version.revSha1),
                         JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
 
