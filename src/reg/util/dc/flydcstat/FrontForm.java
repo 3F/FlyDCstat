@@ -233,7 +233,18 @@ public class FrontForm extends javax.swing.JFrame
         jMenuUploadNick.setText(uimsg.getString("menu_upload_nick"));
         jMenuDhtDownload.setText(uimsg.getString("menu_dht_download"));
         jMenuDhtUpload.setText(uimsg.getString("menu_dht_upload"));
-        jMenuRatingAll.setText(uimsg.getString("menu_total_rating"));
+        jMenuRatingAll.setText(uimsg.getString("menu_total_rating"));        
+        jMenuAnalysis.setText(uimsg.getString("menu_analisis"));
+        jMenuItemCompire.setText(uimsg.getString("menu_analisis_eff"));
+        jMenuItemDynamics.setText(uimsg.getString("menu_analisis_dynamic"));
+        jMenuItemTrafficDia.setText(uimsg.getString("menu_analisis_traffic"));
+        jMenuItemExportCsv.setText(uimsg.getString("menu_analisis_csv"));        
+        jMenuSettings.setText(uimsg.getString("menu_service"));
+        jMenuItemMainSettings.setText(uimsg.getString("menu_service_param"));        
+        jMenuInfo.setText(uimsg.getString("menu_info"));
+        jMenuItemSelectAll.setText(uimsg.getString("popmenu_selectall"));
+        jMenuItemCopy.setText(uimsg.getString("popmenu_copy"));        
+        jMenuItemSaveFav.setText(uimsg.getString("popmenu_save_fav")); 
     }
 
     /**

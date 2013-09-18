@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Export
@@ -33,12 +34,12 @@ public class Export
         try{
             String data = _getFavoriteFile();
             for(TFavoriteValues fav : favorites){
-                Pattern pat = Pattern.compile("(\\sconnect\\s*=\\s*)\"\\d\"([\\s\\S]+?Server[\\s\\S]+?"+fav.name+")", Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
-//                data = pat.matcher(data).replaceFirst("$1\\Q0\\E$2");
-//                data = pat.matcher(data).replaceFirst("$1" + Matcher.quoteReplacement((fav.autoload)?"1":"0") + "$2");
-                data = pat.matcher(data).replaceFirst("$1\" " + ((fav.autoload)?"1":"0") + "\" $2");//TODO: I don't know how to Quotation
+                //TODO: жадность - "(\\sconnect\\s*=\\s*)\"\\d\"(.+?Server.+?"+fav.name+")" либо:
+                String r = "(\\sConnect\\s*=\\s*\")\\d(\"\\s*Description\\s*=\\s*\"[^\"]*\"\\s*Nick\\s*=\\s*\"[^\"]*\"\\s*Password\\s*=\\s*\"[^\"]*\"\\s*Server\\s*=\\s*\"[A-z\\s:/\\\\]*"+fav.name.trim()+")";
+                Pattern pat = Pattern.compile(r, Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
+                //"$1\\Q0\\E$2"
+                data = pat.matcher(data).replaceFirst("$1" + Matcher.quoteReplacement((fav.autoload)?"1":"0") + "$2");
             }
-            data = data.replace("=\" ", "=\""); //TODO
             _saveFavoriteFile(data, Config.getFavoriteXml(true));
             return true;
         }
