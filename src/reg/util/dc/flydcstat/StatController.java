@@ -35,6 +35,18 @@ import reg.util.dc.flydcstat.exceptions.IllegalOperationException;
  */
 public class StatController
 {
+    public enum TStat
+    {
+        DownloadHub,
+        DownloadNick,
+        UploadHub,
+        UploadNick,
+        DhtDownload,
+        DhtUpload,
+        RatingAll,
+        VisualData
+    }
+    
     private Dbases dBases   = null;
     private FrontForm view  = null;
     /**
@@ -72,22 +84,35 @@ public class StatController
     /**
      * Wrapper events handler
      */
-    private void warpperActionPerformed(String title, String[] columns, ArrayList<ArrayList<Object>> rows)
+    private void warpperActionPerformed(TStat tstat, String[] columns, ArrayList<ArrayList<Object>> rows)
     {
-        view.setTitle(title);
+        view.setTitle(_getTitleByStat(tstat));
+        
+        if(tstat == TStat.DownloadHub || tstat == TStat.UploadHub){
+            view.tblInfo.setModel(view.tableModelBolleanFirst());
+        }
+        else{
+            view.tblInfo.setModel(view.tableModelObjectAll());
+        }
 
         DefaultTableModel tblModel = (DefaultTableModel)view.tblInfo.getModel();
         //erase all columns
         tblModel.setColumnCount(0);
         //erase all rows
-        tblModel.setRowCount(0);     
-        //place new        
-        tblModel.addColumn(""); //TODO: first boolean class
+        tblModel.setRowCount(0);
+        
+        //place new
+        if(tstat == TStat.DownloadHub || tstat == TStat.UploadHub){
+            tblModel.addColumn(""); //for checkbox, see model of tableModelBolleanFirst
+            view.tblInfo.getColumnModel().getColumn(0).setMaxWidth(24);
+        }
         for(String column: columns){
             tblModel.addColumn(column);
         }
-        view.tblInfo.getColumnModel().getColumn(0).setMaxWidth(24);
-                
+        if(tstat == TStat.DownloadHub || tstat == TStat.UploadHub){
+            view.tblInfo.getColumnModel().getColumn(0).setMaxWidth(24);
+        }        
+        
         if(rows.size() < 1){
             JOptionPane.showMessageDialog(view,
                                             uimsg.getString("stat_norecord"),
@@ -98,6 +123,38 @@ public class StatController
         for(ArrayList<Object> row: rows){
             tblModel.addRow(row.toArray());
         }
+    }
+    
+    private String _getTitleByStat(TStat tstat)
+    {
+        switch(tstat)
+        {
+            case DhtDownload:{
+                return uimsg.getString("stat_download_dht_wtitle");
+            }
+            case DhtUpload:{
+                return uimsg.getString("stat_upload_dht_wtitle");
+            }
+            case DownloadHub:{
+                return uimsg.getString("stat_download_hub_wtitle");
+            }
+            case DownloadNick:{
+                return uimsg.getString("stat_download_nick_wtitle");
+            }
+            case RatingAll:{
+                return uimsg.getString("stat_rating_total");
+            }
+            case UploadHub:{
+                return uimsg.getString("stat_upload_hub_wtitle");
+            }
+            case UploadNick:{
+                return uimsg.getString("stat_upload_nick_wtitle");
+            }
+            case VisualData:{
+                break;
+            }
+        }
+        return "";
     }
     
     /**
@@ -113,7 +170,7 @@ public class StatController
                 uimsg.getString("column_hub"),
                 uimsg.getString("column_download")
             };
-            warpperActionPerformed(uimsg.getString("stat_download_hub_wtitle"), columns, rows);
+            warpperActionPerformed(TStat.DownloadHub, columns, rows);
         }
     }
     
@@ -130,7 +187,7 @@ public class StatController
                 uimsg.getString("column_hub"),
                 uimsg.getString("column_upload")
             };
-            warpperActionPerformed(uimsg.getString("stat_upload_hub_wtitle"), columns, rows);
+            warpperActionPerformed(TStat.UploadHub, columns, rows);
         }
     }    
     
@@ -147,7 +204,7 @@ public class StatController
                 uimsg.getString("column_nick"),
                 uimsg.getString("column_download")
             };
-            warpperActionPerformed(uimsg.getString("stat_download_nick_wtitle"), columns, rows);
+            warpperActionPerformed(TStat.DownloadNick, columns, rows);
         }
     }
     
@@ -164,7 +221,7 @@ public class StatController
                 uimsg.getString("column_nick"),
                 uimsg.getString("column_upload")
             };
-            warpperActionPerformed(uimsg.getString("stat_upload_nick_wtitle"), columns, rows);
+            warpperActionPerformed(TStat.UploadNick, columns, rows);
         }
     }
     
@@ -182,7 +239,7 @@ public class StatController
                 uimsg.getString("column_download"),
                 uimsg.getString("column_ip")
             };
-            warpperActionPerformed(uimsg.getString("stat_download_dht_wtitle"), columns, rows);
+            warpperActionPerformed(TStat.DhtDownload, columns, rows);
         }
     }
     
@@ -200,7 +257,7 @@ public class StatController
                 uimsg.getString("column_upload"),
                 uimsg.getString("column_ip")
             };
-            warpperActionPerformed(uimsg.getString("stat_upload_dht_wtitle"), columns, rows);
+            warpperActionPerformed(TStat.DhtUpload, columns, rows);
         }
     }    
 
@@ -218,7 +275,7 @@ public class StatController
                 uimsg.getString("column_download"),
                 uimsg.getString("column_rating")
             };
-            warpperActionPerformed(uimsg.getString("stat_rating_total"), columns, rows);
+            warpperActionPerformed(TStat.RatingAll, columns, rows);
         }
     }
        

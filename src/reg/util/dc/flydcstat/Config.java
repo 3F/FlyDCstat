@@ -25,6 +25,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * https://bitbucket.org/3F/vssolutionbuildevent/src/e0867b0793bc556d0e03e263001ea32b9d9e3531/vsSolutionBuildEvent/Config.cs
@@ -85,6 +87,19 @@ public class Config
             }
         }
     }
+    
+    /**
+     * @param isNew - generate new
+     */
+    public static String getFavoriteXml(boolean isNew)
+    {
+        String fav = data.favoriteXml;
+        if(isNew){
+            SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss.S");
+            fav = String.format("%s_%s.xml", data.favoriteXml, date.format(new Date()));
+        }
+        return data.dbPath.substring(0, data.dbPath.lastIndexOf("/")) + "/" + fav;
+    }    
 
     protected Config(){}
 }

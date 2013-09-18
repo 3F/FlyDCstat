@@ -30,6 +30,7 @@ import java.util.jar.Manifest;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.TableModel;
 
 class JpanelGraphics extends JPanel
 {
@@ -178,6 +179,46 @@ public class FrontForm extends javax.swing.JFrame
         jMenuLabelPath.setToolTipText(toolTip + " " + path);
     }
     
+    protected TableModel tableModelBolleanFirst()
+    {
+        return new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "", "", "", ""
+            }
+        ){
+            Class[] types = new Class [] {
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        };
+    }
+    
+    protected TableModel tableModelObjectAll()
+    {
+        return new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "", "", ""
+            }
+        ){
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        };
+    }
+    
     /**
      * rendering of internationalization
      * @param uimsg 
@@ -288,20 +329,9 @@ public class FrontForm extends javax.swing.JFrame
             },
             new String []
             {
-                "", "", "", ""
-            }
-        )
-        {
-            Class[] types = new Class []
-            {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
-            };
 
-            public Class getColumnClass(int columnIndex)
-            {
-                return types [columnIndex];
             }
-        });
+        ));
         jScrollPane2.setViewportView(tblInfo);
 
         javax.swing.GroupLayout jPanelListLayout = new javax.swing.GroupLayout(jPanelList);
@@ -554,7 +584,7 @@ public class FrontForm extends javax.swing.JFrame
 
     private void jMenuItemSaveFavActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemSaveFavActionPerformed
     {//GEN-HEADEREND:event_jMenuItemSaveFavActionPerformed
-        ArrayList<TFavoriteValues> data = new ArrayList<TFavoriteValues>();
+        ArrayList<TFavoriteValues> data = new ArrayList<>();
         for(int i = 0, n = tblInfo.getRowCount(); i < n; ++i){
             data.add(new TFavoriteValues(tblInfo.getValueAt(i, 1).toString(), (boolean)tblInfo.getValueAt(i, 0)));
         }
@@ -563,6 +593,12 @@ public class FrontForm extends javax.swing.JFrame
                                             "saved to /Settings/",
                                             "",
                                             JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            JOptionPane.showMessageDialog(null, 
+                                "problem to save",
+                                "",
+                                JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jMenuItemSaveFavActionPerformed
     

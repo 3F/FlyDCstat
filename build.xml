@@ -37,7 +37,8 @@
     <target name="-post-jar">
         <jar jarfile="dist/flyDCstat_full.jar">
             <zipfileset src="${dist.jar}" excludes="META-INF/*" />
-            <zipfileset src="lib/sqlite-jdbc-3.7.15.jar" excludes="META-INF/*" />
+            <zipfileset src="lib/sqlite-jdbc/sqlite-jdbc-3.7.15.jar" excludes="META-INF/*" />
+            <zipfileset src="lib/xstream/xstream-1.4.4.jar" excludes="META-INF/*" />
             <manifest>
                 <attribute name="Main-Class" value="reg.util.dc.flydcstat.FlyDCstat"/>
                 <attribute name="Implementation-Version" value="build-${build.number}"/>

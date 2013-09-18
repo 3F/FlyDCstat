@@ -19,7 +19,8 @@ package reg.util.dc.flydcstat;
 public class Settings
 {
     /** full path to the database */
-    public String dbPath = "Settings/FlylinkDC.sqlite";
+    public String dbPath        = "Settings/FlylinkDC.sqlite";
+    public String favoriteXml   = "Favorites.xml";
     
     /** UI Language */
     public TLangUI lang = TLangUI.RU;

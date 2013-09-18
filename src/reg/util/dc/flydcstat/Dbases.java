@@ -273,14 +273,13 @@ public class Dbases
     public ArrayList<ArrayList<Object>> statTrafficByNick(TGroupStatistic group, TSorted order)
     {
         String field = fieldStatistic(group);
-        String sql   = "SELECT null, fly_dic.name AS nick, SUM("+ field +") AS "+ field +" "
+        String sql   = "SELECT fly_dic.name AS nick, SUM("+ field +") AS "+ field +" "
                 + "FROM fly_ratio INNER JOIN fly_dic ON dic_nick = fly_dic.id "
                 + "WHERE "+ field +" > 0 GROUP BY nick ORDER BY "+ field +" ";
         ArrayList<ArrayList<Object>> rows = wrapperGettingInfo(sql + order);
         
         for(ArrayList<Object> row: rows){
-            row.set(0, true);
-            row.set(2, cellPrintSize(Long.valueOf(row.get(2).toString())));
+            row.set(1, cellPrintSize(Long.valueOf(row.get(1).toString())));
         }
         return rows;
     }
@@ -294,7 +293,7 @@ public class Dbases
     public ArrayList<ArrayList<Object>> statDhtTraffic(TGroupStatistic group, TSorted order)
     {
         String field = fieldStatistic(group);
-        String sql   = "SELECT null, nick.name AS nickname, SUM("+ field +") AS "+ field +", ip.name AS ip "
+        String sql   = "SELECT nick.name AS nickname, SUM("+ field +") AS "+ field +", ip.name AS ip "
                 + "FROM fly_ratio "
                 + "LEFT JOIN fly_dic AS nick ON dic_nick = nick.id "
                 + "LEFT JOIN fly_dic AS hub ON dic_hub = hub.id "
@@ -304,8 +303,7 @@ public class Dbases
         ArrayList<ArrayList<Object>> rows = wrapperGettingInfo(sql + order);
         
         for(ArrayList<Object> row: rows){
-            row.set(0, true);
-            row.set(2, cellPrintSize(Long.valueOf(row.get(2).toString())));
+            row.set(1, cellPrintSize(Long.valueOf(row.get(1).toString())));
         }
         return rows;
     }
@@ -316,15 +314,14 @@ public class Dbases
      */
     public ArrayList<ArrayList<Object>> statRatingAll()
     {
-        String sql = "SELECT null, SUM(upload), SUM(download) FROM fly_ratio LIMIT 1";
+        String sql = "SELECT SUM(upload), SUM(download) FROM fly_ratio LIMIT 1";
         ArrayList<ArrayList<Object>> rows = wrapperGettingInfo(sql);
         
         for(ArrayList<Object> row: rows){
-            row.set(0, true);
-            double upload   = Double.valueOf(row.get(1).toString());
-            double download = Double.valueOf(row.get(2).toString());
-            row.set(1, cellPrintSize((long)upload));
-            row.set(2, cellPrintSize((long)download));
+            double upload   = Double.valueOf(row.get(0).toString());
+            double download = Double.valueOf(row.get(1).toString());
+            row.set(0, cellPrintSize((long)upload));
+            row.set(1, cellPrintSize((long)download));
             row.add(String.format("%.2f", upload / download));
             break;
         }

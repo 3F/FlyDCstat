@@ -24,8 +24,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.regex.Pattern;
 
 public class Export
@@ -41,8 +39,7 @@ public class Export
                 data = pat.matcher(data).replaceFirst("$1\" " + ((fav.autoload)?"1":"0") + "\" $2");//TODO: I don't know how to Quotation
             }
             data = data.replace("=\" ", "=\""); //TODO
-            SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss.S");
-            _saveFavoriteFile(data, "Settings/Favorites_"+ date.format(new Date()) +".xml");//TODO:
+            _saveFavoriteFile(data, Config.getFavoriteXml(true));
             return true;
         }
         catch(IOException e){
@@ -58,14 +55,12 @@ public class Export
     
     private static String _getFavoriteFile() throws IOException
     {
-        String path = Config.data.dbPath;
-        path = path.substring(0, path.lastIndexOf("/")) + "/Favorites.xml"; //TODO:
         String ret;
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(Config.getFavoriteXml(false)), "UTF-8"))) {
             ret = "";
             String line;
             while((line = reader.readLine()) != null){
-                ret += line;
+                ret += line + System.getProperty("line.separator");
             }
         }
         return ret;
