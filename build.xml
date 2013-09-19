@@ -20,7 +20,7 @@
     <description>Builds, tests, and runs the project flyDCstat.</description>
     <import file="nbproject/build-impl.xml"/>
     
-    <property name="version" value="0.2.3"/>
+    <property name="version" value="0.2.4"/>
     <property name="createdBy" value="reg (entry.reg@gmail.com)"/>
     <property name="specificationTitle" value="Utility statistics"/>
     
@@ -33,6 +33,9 @@
             <attribute name="Created-By" value="${createdBy}"/>
             <attribute name="Specification-Version" value="${version}"/>
         </manifest>
+        <exec dir="." executable="cmd">
+              <arg line="/C revision.bat ${version} ${build.number}"/>
+        </exec>        
     </target>
     
     <target name="-post-jar">
