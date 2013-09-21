@@ -41,14 +41,16 @@ public class FlyDCstat
         }
         
         Config.load();
-        String dbName = (args.length > 0)? args[0].trim() : Config.data.dbPath;
+        if(args.length > 0){
+            Config.data.dbPath = args[0].trim();
+        }
         Config.uimsg = ResourceBundle.getBundle("reg/util/dc/flydcstat/i18n/MessagesGUI", new Locale("ru", "RU")); //TODO: switch locale
-        run(dbName);
+        run();
     }
     
-    private static void run(String dbName)
+    private static void run()
     {
-        Dbases db       = new Dbases(dbName);
+        Dbases db       = new Dbases(Config.data.dbPath);
         FrontForm frm   = new FrontForm();
         try{
             new StatController(db, frm);

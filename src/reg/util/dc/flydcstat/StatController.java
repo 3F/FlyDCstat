@@ -35,6 +35,9 @@ import reg.util.dc.flydcstat.exceptions.IllegalOperationException;
  */
 public class StatController
 {
+    /**
+     * type of statistics
+     */
     public enum TStat
     {
         DownloadHub,
@@ -47,7 +50,9 @@ public class StatController
         VisualData
     }
     
+    /** model handling */
     private Dbases dBases   = null;
+    /** view handling */
     private FrontForm view  = null;
     
     public static TStat lastHandledStat;
@@ -122,9 +127,15 @@ public class StatController
         try{
             WorkPathHelper w = new WorkPathHelper(Config.getWorkPath());
             fav = new FavoriteXml(w.getFavoriteFile(Config.data.favoriteXml));
+
+            if(tstat == TStat.DownloadHub || tstat == TStat.UploadHub){
+                if(Config.data.actual == Settings.TActual.FavoriteUse){
+                    rows = _clearNotUsed(fav, rows);
+                }
+            }
         }
         catch(IOException e){
-            FlyDCstat.logger.log(Level.SEVERE, "checking autoload-status", e);
+            FlyDCstat.logger.log(Level.WARNING, "checking record status", e);
             //TODO:
         }
         
@@ -138,6 +149,20 @@ public class StatController
             }
             tblModel.addRow(row.toArray());
         }
+    }
+    
+    /**
+     * if record already been removed from favorite.xml
+     */
+    private ArrayList<ArrayList<Object>> _clearNotUsed(FavoriteXml fav, ArrayList<ArrayList<Object>> rows)
+    {
+        ArrayList<ArrayList<Object>> ret = new ArrayList<>();
+        for(ArrayList<Object> row: rows){
+            if(fav.isExist(row.get(1).toString())){
+                ret.add(row);
+            }
+        }
+        return ret;
     }
     
     private String _getTitleByStat(TStat tstat)
@@ -327,6 +352,16 @@ public class StatController
             if(data == null){
                 return null;
             }
+
+            try{
+                FavoriteXml fav = new FavoriteXml(new WorkPathHelper(Config.getWorkPath()).getFavoriteFile(Config.data.favoriteXml));
+                if(Config.data.actual == Settings.TActual.FavoriteUse){
+                    data = _clearNotUsed(fav, data);
+                }
+            }
+            catch(IOException e){
+                FlyDCstat.logger.log(Level.WARNING, "checking record status/VS", e);
+            }
             
             ArrayList<PieValues> effValues = new ArrayList<>();
             long sum = 0;
@@ -347,6 +382,17 @@ public class StatController
             effValues.set(0, (new PieValues(((float)((1 - (double)sumDefect / (double)sum)) * 100f), "Main", cMain)));
             return effValues.toArray(new PieValues[effValues.size()]);
         }
+        
+        private ArrayList<Dbases.TPairDataRaw> _clearNotUsed(FavoriteXml fav, ArrayList<Dbases.TPairDataRaw> data)
+        {
+            ArrayList<Dbases.TPairDataRaw> ret = new ArrayList<>();
+            for(Dbases.TPairDataRaw rc: data){
+                if(fav.isExist(rc.text)){
+                    ret.add(rc);
+                }
+            }
+            return ret;
+        }        
     }    
     
     private void setHandlers()

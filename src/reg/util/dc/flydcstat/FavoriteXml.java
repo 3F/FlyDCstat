@@ -70,7 +70,7 @@ public class FavoriteXml
     public boolean isAutoloadHub(String name)
     {
         //TODO: up^ replaceParamConnect
-        String r = "\\sConnect\\s*=\\s*\\\"(\\d)\\\"\\s*Description\\s*=\\s*\\\"[^\\\"]*\\\"\\s*Nick\\s*=\\s*\\\"[^\\\"]*\\\"\\s*Password\\s*=\\s*\\\"[^\\\"]*\\\"\\s*Server\\s*=\\s*\\\"[A-z\\s:/\\\\]*" + name.trim();
+        String r = "Connect\\s*=\\s*\\\"(\\d)\\\"\\s*Description\\s*=\\s*\\\"[^\\\"]*\\\"\\s*Nick\\s*=\\s*\\\"[^\\\"]*\\\"\\s*Password\\s*=\\s*\\\"[^\\\"]*\\\"\\s*Server\\s*=\\s*\\\"[A-z\\s:/\\\\]*" + name.trim();
         Pattern pat = Pattern.compile(r, Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
         Matcher m = pat.matcher(data);
         if(!m.find()){
@@ -80,5 +80,11 @@ public class FavoriteXml
             return true;
         }
         return false;
+    }
+    
+    public boolean isExist(String name)
+    {
+        Pattern pat = Pattern.compile("Server\\s*=\\s*\\\"[A-z\\s:/\\\\]*" + name.trim(), Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
+        return pat.matcher(data).find();
     }
 }

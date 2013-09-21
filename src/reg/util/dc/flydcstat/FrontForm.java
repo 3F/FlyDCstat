@@ -235,14 +235,20 @@ public class FrontForm extends javax.swing.JFrame
         jMenuUploadNick.setText(Config.uimsg.getString("menu_upload_nick"));
         jMenuDhtDownload.setText(Config.uimsg.getString("menu_dht_download"));
         jMenuDhtUpload.setText(Config.uimsg.getString("menu_dht_upload"));
-        jMenuRatingAll.setText(Config.uimsg.getString("menu_total_rating"));        
+        jMenuRatingAll.setText(Config.uimsg.getString("menu_total_rating"));
+        
         jMenuAnalysis.setText(Config.uimsg.getString("menu_analisis"));
         jMenuItemCompire.setText(Config.uimsg.getString("menu_analisis_eff"));
         jMenuItemDynamics.setText(Config.uimsg.getString("menu_analisis_dynamic"));
         jMenuItemTrafficDia.setText(Config.uimsg.getString("menu_analisis_traffic"));
-        jMenuItemExportCsv.setText(Config.uimsg.getString("menu_analisis_csv"));        
+        jMenuItemExportCsv.setText(Config.uimsg.getString("menu_analisis_csv"));
+        
+        jMenuPeriods.setText(Config.uimsg.getString("menu_periods"));
+        
         jMenuSettings.setText(Config.uimsg.getString("menu_service"));
-        jMenuItemMainSettings.setText(Config.uimsg.getString("menu_service_param"));        
+        jMenuItemActualData.setText(Config.uimsg.getString("menu_service_actual"));
+        jMenuItemMainSettings.setText(Config.uimsg.getString("menu_service_param"));  
+        
         jMenuInfo.setText(Config.uimsg.getString("menu_info"));
         jMenuItemSelectAll.setText(Config.uimsg.getString("popmenu_selectall"));
         jMenuItemCopy.setText(Config.uimsg.getString("popmenu_copy"));        
@@ -285,7 +291,9 @@ public class FrontForm extends javax.swing.JFrame
         jMenuItemDynamics = new javax.swing.JMenuItem();
         jMenuItemTrafficDia = new javax.swing.JMenuItem();
         jMenuItemExportCsv = new javax.swing.JMenuItem();
+        jMenuPeriods = new javax.swing.JMenu();
         jMenuSettings = new javax.swing.JMenu();
+        jMenuItemActualData = new javax.swing.JCheckBoxMenuItem();
         jMenuItemMainSettings = new javax.swing.JMenuItem();
         jMenuInfo = new javax.swing.JMenu();
         jMenuItemAbout = new javax.swing.JMenuItem();
@@ -495,7 +503,21 @@ public class FrontForm extends javax.swing.JFrame
 
         jMenuBar1.add(jMenuAnalysis);
 
+        jMenuPeriods.setText("Отчетные периоды");
+        jMenuBar1.add(jMenuPeriods);
+
         jMenuSettings.setText("Сервис");
+
+        jMenuItemActualData.setSelected(true);
+        jMenuItemActualData.setText("Показывать только используемые хабы");
+        jMenuItemActualData.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItemActualDataActionPerformed(evt);
+            }
+        });
+        jMenuSettings.add(jMenuItemActualData);
 
         jMenuItemMainSettings.setText("Параметры");
         jMenuSettings.add(jMenuItemMainSettings);
@@ -628,6 +650,16 @@ public class FrontForm extends javax.swing.JFrame
             jMenuItemSaveFav.setEnabled(true);
         }
     }//GEN-LAST:event_jPopupMenuPopupMenuWillBecomeVisible
+
+    private void jMenuItemActualDataActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemActualDataActionPerformed
+    {//GEN-HEADEREND:event_jMenuItemActualDataActionPerformed
+        if(jMenuItemActualData.isSelected()){
+            Config.data.actual = Settings.TActual.FavoriteUse;
+        }
+        else{
+            Config.data.actual = Settings.TActual.AllPeriods;
+        }
+    }//GEN-LAST:event_jMenuItemActualDataActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog jDialog1;
@@ -639,6 +671,7 @@ public class FrontForm extends javax.swing.JFrame
     private javax.swing.JMenuItem jMenuDownloadNick;
     private javax.swing.JMenu jMenuInfo;
     private javax.swing.JMenuItem jMenuItemAbout;
+    private javax.swing.JCheckBoxMenuItem jMenuItemActualData;
     private javax.swing.JMenuItem jMenuItemCompire;
     private javax.swing.JMenuItem jMenuItemCopy;
     private javax.swing.JMenuItem jMenuItemDynamics;
@@ -648,6 +681,7 @@ public class FrontForm extends javax.swing.JFrame
     private javax.swing.JMenuItem jMenuItemSelectAll;
     private javax.swing.JMenuItem jMenuItemTrafficDia;
     private javax.swing.JMenu jMenuLabelPath;
+    private javax.swing.JMenu jMenuPeriods;
     private javax.swing.JMenuItem jMenuRatingAll;
     private javax.swing.JMenu jMenuSelectType;
     private javax.swing.JMenu jMenuSettings;

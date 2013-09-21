@@ -27,4 +27,14 @@ public class Settings
     public enum TLangUI{
         RU, EN
     };
+    
+    /**
+     * actualisation data
+     */    
+    public TActual actual = TActual.FavoriteUse;
+    public enum TActual
+    {
+        AllPeriods,
+        FavoriteUse
+    }    
 }

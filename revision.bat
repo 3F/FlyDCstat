@@ -20,8 +20,8 @@
  echo package reg.util.dc.flydcstat;>> Version.java
  echo public class Version>> Version.java
  echo {>> Version.java
- echo     public final static String specification = "0.2.3";>> Version.java
- echo     public final static String implementation = "";>> Version.java
+ echo     public final static String specification = "%1%";>> Version.java
+ echo     public final static String implementation = "%2";>> Version.java
  echo     public final static String revSha1 = "%format_ident%";>> Version.java
  echo }>> Version.java
 

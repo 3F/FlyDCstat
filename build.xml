@@ -20,12 +20,18 @@
     <description>Builds, tests, and runs the project flyDCstat.</description>
     <import file="nbproject/build-impl.xml"/>
     
-    <property name="version" value="0.2.3"/>
+    <property name="version" value="0.2.5"/>
     <property name="createdBy" value="reg (entry.reg@gmail.com)"/>
     <property name="specificationTitle" value="Utility statistics"/>
     
-    <target depends="init,-do-jar-with-libraries-create-manifest,-do-jar-with-libraries-copy-manifest" if="do.archive+main.class.available" name="-do-jar-with-libraries-set-main">
+    <target name="-pre-init">
         <buildnumber file="build.num"/>
+        <exec dir="." executable="cmd">
+              <arg line="/C revision.bat ${version} ${build.number}"/>
+        </exec>
+    </target>
+    
+    <target depends="init,-do-jar-with-libraries-create-manifest,-do-jar-with-libraries-copy-manifest" if="do.archive+main.class.available" name="-do-jar-with-libraries-set-main">
         <manifest file="${tmp.manifest.file}" mode="update">
             <attribute name="Main-Class" value="reg.util.dc.flydcstat.FlyDCstat"/>
             <attribute name="Implementation-Version" value="build-${build.number}"/>
