@@ -109,7 +109,11 @@ public class Config
     
     public static String getWorkPath()
     {
-        return data.dbPath.substring(0, data.dbPath.lastIndexOf("/"));
+        int pos = data.dbPath.replace('\\', '/').lastIndexOf("/");
+        if(pos < 0){
+            return "";
+        }
+        return data.dbPath.substring(0, pos);
     }    
 
     protected Config(){}
